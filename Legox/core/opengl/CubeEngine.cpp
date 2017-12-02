@@ -6,6 +6,7 @@
 struct VertexData
 {
     QVector3D position;
+    QVector3D color;
 };
 
 CubeEngine::CubeEngine()
@@ -37,40 +38,40 @@ void CubeEngine::initCubes()
     // is different.
     VertexData vertices[] = {
         // Vertex data for face 0
-        {QVector3D(-1.0, -1.0,  1.0)},  // v0
-        {QVector3D( 1.0, -1.0,  1.0)}, // v1
-        {QVector3D(-1.0,  1.0,  1.0)},  // v2
-        {QVector3D( 1.0,  1.0,  1.0)}, // v3
+        {QVector3D(-1.0, -1.0,  1.0), QVector3D(1.0, 0.0, 0.0)},  // v0
+        {QVector3D( 1.0, -1.0,  1.0), QVector3D(1.0, 0.0, 0.0)}, // v1
+        {QVector3D(-1.0,  1.0,  1.0), QVector3D(1.0, 0.0, 0.0)},  // v2
+        {QVector3D( 1.0,  1.0,  1.0), QVector3D(1.0, 0.0, 0.0)}, // v3
 
         // Vertex data for face 1
-        {QVector3D( 1.0, -1.0,  1.0)}, // v4
-        {QVector3D( 1.0, -1.0, -1.0)}, // v5
-        {QVector3D( 1.0,  1.0,  1.0)}, // v6
-        {QVector3D( 1.0,  1.0, -1.0)}, // v7
+        {QVector3D( 1.0, -1.0,  1.0), QVector3D(0.0, 1.0, 0.0)}, // v4
+        {QVector3D( 1.0, -1.0, -1.0), QVector3D(0.0, 1.0, 0.0)}, // v5
+        {QVector3D( 1.0,  1.0,  1.0), QVector3D(0.0, 1.0, 0.0)}, // v6
+        {QVector3D( 1.0,  1.0, -1.0), QVector3D(0.0, 1.0, 0.0)}, // v7
 
         // Vertex data for face 2
-        {QVector3D( 1.0, -1.0, -1.0)}, // v8
-        {QVector3D(-1.0, -1.0, -1.0)},  // v9
-        {QVector3D( 1.0,  1.0, -1.0)}, // v10
-        {QVector3D(-1.0,  1.0, -1.0)},  // v11
+        {QVector3D( 1.0, -1.0, -1.0), QVector3D(1.0, 0.0, 0.0)}, // v8
+        {QVector3D(-1.0, -1.0, -1.0), QVector3D(1.0, 0.0, 0.0)},  // v9
+        {QVector3D( 1.0,  1.0, -1.0), QVector3D(1.0, 0.0, 0.0)}, // v10
+        {QVector3D(-1.0,  1.0, -1.0), QVector3D(1.0, 0.0, 0.0)},  // v11
 
         // Vertex data for face 3
-        {QVector3D(-1.0, -1.0, -1.0)}, // v12
-        {QVector3D(-1.0, -1.0,  1.0)},  // v13
-        {QVector3D(-1.0,  1.0, -1.0)}, // v14
-        {QVector3D(-1.0,  1.0,  1.0)},  // v15
+        {QVector3D(-1.0, -1.0, -1.0), QVector3D(1.0, 0.0, 0.0)}, // v12
+        {QVector3D(-1.0, -1.0,  1.0), QVector3D(1.0, 0.0, 0.0)},  // v13
+        {QVector3D(-1.0,  1.0, -1.0), QVector3D(1.0, 0.0, 0.0)}, // v14
+        {QVector3D(-1.0,  1.0,  1.0), QVector3D(1.0, 0.0, 0.0)},  // v15
 
         // Vertex data for face 4
-        {QVector3D(-1.0, -1.0, -1.0)}, // v16
-        {QVector3D( 1.0, -1.0, -1.0)}, // v17
-        {QVector3D(-1.0, -1.0,  1.0)}, // v18
-        {QVector3D( 1.0, -1.0,  1.0)}, // v19
+        {QVector3D(-1.0, -1.0, -1.0), QVector3D(1.0, 0.0, 0.0)}, // v16
+        {QVector3D( 1.0, -1.0, -1.0), QVector3D(1.0, 0.0, 0.0)}, // v17
+        {QVector3D(-1.0, -1.0,  1.0), QVector3D(1.0, 0.0, 0.0)}, // v18
+        {QVector3D( 1.0, -1.0,  1.0), QVector3D(1.0, 0.0, 0.0)}, // v19
 
         // Vertex data for face 5
-        {QVector3D(-1.0,  1.0,  1.0)}, // v20
-        {QVector3D( 1.0,  1.0,  1.0)}, // v21
-        {QVector3D(-1.0,  1.0, -1.0)}, // v22
-        {QVector3D( 1.0,  1.0, -1.0)}  // v23
+        {QVector3D(-1.0,  1.0,  1.0), QVector3D(1.0, 0.0, 0.0)}, // v20
+        {QVector3D( 1.0,  1.0,  1.0), QVector3D(1.0, 0.0, 0.0)}, // v21
+        {QVector3D(-1.0,  1.0, -1.0), QVector3D(1.0, 0.0, 0.0)}, // v22
+        {QVector3D( 1.0,  1.0, -1.0), QVector3D(1.0, 0.0, 0.0)}  // v23
     };
 
     // Indices for drawing cube faces using triangle strips.
@@ -113,7 +114,11 @@ void CubeEngine::drawCubes(QGLShaderProgram *program)
     glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void *)offset);
 
     // Offset for texture coordinate
-    //offset += sizeof(QVector3D);
+    offset += sizeof(QVector3D);
+
+    int colorLocation = program->attributeLocation("a_color");
+    program->enableAttributeArray(colorLocation);
+    glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void *)offset);
 
     // Draw cube geometry using indices from VBO 1
     glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_SHORT, 0);
