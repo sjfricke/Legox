@@ -18,7 +18,9 @@ MyGLWidget::MyGLWidget(QWidget *parent)
       m_program(new QGLShaderProgram),
       m_cubes(new CubeEngine)
 {
-    m_rotation = {0, 0, 0};
+    m_translate = {0.0, 0.0, -5.0};
+    m_rotation = {0.0, 0.0, 0.0};
+    m_zoom = 0;
 }
 
 MyGLWidget::~MyGLWidget()
@@ -38,6 +40,7 @@ void MyGLWidget::mousePressEvent(QMouseEvent *e)
     } else if (e->button() == Qt::MouseButton::RightButton) { // right
         m_clickSide = 1;
         m_clickStartR = QVector2D(e->pos());
+        m_clickLastR = QVector2D(e->pos());
     }
 }
 
@@ -45,10 +48,8 @@ void MyGLWidget::mouseMoveEvent(QMouseEvent *e)
 {
     if (e->buttons() & Qt::LeftButton) { // left
         m_clickLastL = QVector2D(e->pos()) - m_clickStartL;
-        qDebug() << m_clickLastL;
         rotateEvent(e);
     } else if (e->buttons() & Qt::RightButton) { // right
-        m_clickLastR = QVector2D(e->pos()) - m_clickStartR;
         translateEvent(e);
     }
 }
@@ -60,7 +61,15 @@ void MyGLWidget::mouseReleaseEvent(QMouseEvent *e)
 
 void MyGLWidget::wheelEvent(QWheelEvent *e)
 {
-   //e->delta(); -120 or 120
+    if (e->delta() > 0) {
+        if (m_translate.z() < 0) {
+            m_translate.setZ(m_translate.z() + 1.0);
+        }
+    } else {
+        m_translate.setZ(m_translate.z() - 1.0);
+    }
+
+    updateGL();
 }
 
 
@@ -85,7 +94,12 @@ void MyGLWidget::timerEvent(QTimerEvent *e)
 
 void MyGLWidget::translateEvent(QMouseEvent *e)
 {
+    QVector2D diff =  m_clickLastR - QVector2D(e->pos());
+    m_translate.setX(m_translate.x() - (diff.x() / 100));
+    m_translate.setY(m_translate.y() + (diff.y() / 100));
 
+    m_clickLastR = QVector2D(e->pos());
+    updateGL();
 }
 
 void MyGLWidget::rotateEvent(QMouseEvent *e)
@@ -165,14 +179,13 @@ void MyGLWidget::resizeGL(int w, int h)
     // Calculate aspect ratio
     qreal aspect = (qreal)w / ((qreal)h?h:1);
 
-    // Set near plane to 3.0, far plane to 7.0, field of view 45 degrees
-    const qreal zNear = 3.0, zFar = 7.0, fov = 45.0;
+    const qreal m_zNear = 2.0, m_zFar = 100.0, m_fov = 45.0;
 
     // Reset projection
     m_projection.setToIdentity();
 
     // Set perspective projection
-    m_projection.perspective(fov, aspect, zNear, zFar);
+    m_projection.perspective(m_fov, aspect, m_zNear, m_zFar);
 }
 
 void MyGLWidget::paintGL()
@@ -182,7 +195,7 @@ void MyGLWidget::paintGL()
 
     // Calculate model view transformation
     QMatrix4x4 m_viewMatrix;
-    m_viewMatrix.translate(0.0, 0.0, -5.0);
+    m_viewMatrix.translate(m_translate);
     m_viewMatrix.rotate(rotation);
 
     // Set modelview-projection matrix
