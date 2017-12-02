@@ -11,7 +11,6 @@ attribute vec3 a_color;
 
 varying vec3 v_color;
 
-//! [0]
 void main()
 {
     // Calculate vertex position in screen space
@@ -20,4 +19,3 @@ void main()
     // Pass color to fragment shader
     v_color = a_color;
 }
-//! [0]

@@ -28,42 +28,45 @@ public:
 protected:
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void wheelEvent(QWheelEvent *e);
     void timerEvent(QTimerEvent *e);
+
+    void translateEvent(QMouseEvent *e);
+    void rotateEvent(QMouseEvent *e);
+    void setXRotation(int angle);
+    void setYRotation(int angle);
+    void setZRotation(int angle);
 
     void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
 
     void initShaders();
-    void initTextures();
+
 
 private:
-    QBasicTimer *timer;
-    QGLShaderProgram *program;
-    CubeEngine *cubes;
+    QBasicTimer *m_timer;
+    QGLShaderProgram *m_program;
+    CubeEngine *m_cubes;
 
-    GLuint texture;
+    GLuint m_texture;
 
-    QMatrix4x4 projection;
+    QMatrix4x4 m_projection;
+
+    int       m_clickSide; // -1 == left, 1 == right
+    QVector2D m_clickStartR;
+    QVector2D m_clickLastR;
+    QVector2D m_clickStartL;
+    QVector2D m_clickLastL;
+
+    QMatrix4x4 m_viewMatrix;
 
     QVector2D mousePressPosition;
     QVector3D rotationAxis;
     qreal angularSpeed;
+    QVector3D m_rotation;
     QQuaternion rotation;
 };
 
-//public slots:
-//    // slots for xyz-rotation slider
-//    void setXRotation(int angle);
-//    void setYRotation(int angle);
-//    void setZRotation(int angle);
-
-//signals:
-//    // signaling rotation from mouse movement
-//    void xRotationChanged(int angle);
-//    void yRotationChanged(int angle);
-//    void zRotationChanged(int angle);
-
-
-#endif // MYGLWIDGET_H
-
+#endif
