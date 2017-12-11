@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QGraphicsView>
+
+#include "myglwidget.h"
 
 #include "core/Legox.h"
 
@@ -28,6 +31,8 @@ private:
     void setupStatusBar();
 
     Ui::MainWindow *mp_ui;
+
+    CubeEngine* mp_cubes;
 
     QMenuBar *mp_menuBar;
     QString m_qFilePath;

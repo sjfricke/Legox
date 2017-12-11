@@ -23,14 +23,14 @@ void File::printInfo() {
     qDebug() << m_path.c_str() << " " << m_name.c_str() << " " << m_ext.c_str();
 }
 
-int File::parseFile() {
+int File::parseFile(CubeEngine* cubes) {
     switch(m_type) {
         case UNKNOWN:
             return -1;
         case STL:
             return parseSTL();
         case OBJ:
-            return parseOBJ();
+            return parseOBJ(cubes);
         default:
             return -1;
     }

@@ -14,6 +14,7 @@
 
 #include <string>
 #include <vector>
+#include "opengl/CubeEngine.h"
 
 #include <QString>
 
@@ -27,7 +28,7 @@ public:
 
     // Creates a new file and parses it to blox data
     // Returns 0 on success
-    int       newFile(QString filePath);
+    int       newFile(QString filePath, CubeEngine* cubes);
 
     History*  getHistory(void) { return mp_history; }
 
@@ -36,6 +37,7 @@ private:
     vector<Bloxs*> m_bloxsList;
     File*          mp_file;
     History*       mp_history;
+    CubeEngine*    m_cubes;
 };
 
 #endif

@@ -22,24 +22,24 @@ CubeEngine::~CubeEngine()
 
 }
 
-void CubeEngine::init()
+void CubeEngine::init(int vert, int ind)
 {
     initializeGLFunctions();
 
     // Generate 2 VBOs
     glGenBuffers(2, vboIds);
 
-    int cubes = 2;
-    m_vertices = (vertexData*)malloc(sizeof(vertexData) * 24 * cubes);
-    m_indices = (void*)malloc(sizeof(GLushort) * 34 * cubes);
+//    int cubes = 2;
+    m_vertices = (vertexData*)malloc(sizeof(vertexData) * vert);
+    m_indices = (void*)malloc(sizeof(GLushort) * ind);
 
     if (m_vertices == NULL) { qDebug() << "FAILL VERTICES MALLOC"; }
     if (m_indices == NULL) { qDebug() << "FAILL INDICES MALLOC";  }
 
     // Initializes cube geometry and transfers it to VBOs
-    addCube(QVector3D(2.0,0.0,0.0), QVector3D(0.0,1.0,0.0));
-    addCube(QVector3D(0.0,0.0,0.0), QVector3D(1.0,0.0,0.0));
-    setupCubes();
+//    addCube(QVector3D(2.0,0.0,0.0), QVector3D(0.0,1.0,0.0));
+//    addCube(QVector3D(0.0,0.0,0.0), QVector3D(1.0,0.0,0.0));
+//    setupCubes();
 }
 
 void CubeEngine::initCubes()
@@ -217,15 +217,16 @@ void CubeEngine::addCube(QVector3D pos, QVector3D color)
     m_cubeCount++;
 }
 
-void CubeEngine::setupCubes()
+void CubeEngine::setupCubes(int vert, int ind)
 {
+    m_int = ind;
     // Transfer vertex data to VBO 0
     glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-    glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(vertexData) * m_cubeCount, static_cast<void*>(m_vertices), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vert * sizeof(vertexData), static_cast<void*>(m_vertices), GL_STATIC_DRAW);
 
     // Transfer index data to VBO 1
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 34 * sizeof(GLushort) * m_cubeCount, static_cast<void*>(m_indices), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ind * sizeof(GLushort), static_cast<void*>(m_indices), GL_STATIC_DRAW);
 }
 
 void CubeEngine::drawCubes(QGLShaderProgram *program)
@@ -250,5 +251,5 @@ void CubeEngine::drawCubes(QGLShaderProgram *program)
     glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(vertexData), (const void *)offset);
 
     // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLE_STRIP, 34 * m_cubeCount, GL_UNSIGNED_SHORT, 0);
+    glDrawElements(GL_TRIANGLE_STRIP, m_int, GL_UNSIGNED_SHORT, 0);
 }

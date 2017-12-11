@@ -10,6 +10,8 @@
 #include <QQuaternion>
 #include <QVector2D>
 
+#include "core/opengl/CubeEngine.h"
+
 QT_BEGIN_NAMESPACE
 class QBasicTimer;
 class QGLShaderProgram;
@@ -25,6 +27,11 @@ public:
     explicit MyGLWidget(QWidget *parent = 0);
     ~MyGLWidget();
 
+    void setCubeEngine(CubeEngine* cubes) { mp_cubes = cubes; }
+    void initCubes(int vert, int ind) {
+        mp_cubes->init(vert, ind);
+        updateGL();
+    }
 protected:
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
@@ -44,13 +51,13 @@ protected:
 
     void initShaders();
 
-
 private:
 
 
     QBasicTimer *m_timer;
     QGLShaderProgram *m_program;
-    CubeEngine *m_cubes;
+
+    CubeEngine* mp_cubes;
 
     GLuint m_texture;
 

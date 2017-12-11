@@ -4,12 +4,14 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    mp_ui(new Ui::MainWindow)
+    mp_ui(new Ui::MainWindow),
+    mp_cubes(new CubeEngine)
 {
+
     mp_ui->setupUi(this);
 
     createMenu();
-    setupStatusBar();
+    setupStatusBar();    
 
 //    connect(mp_ui->myGLWidget, SIGNAL(xRotationChanged(int)), mp_ui->rotXSlider_2, SLOT(setValue(int)));
 //    connect(mp_ui->myGLWidget, SIGNAL(yRotationChanged(int)), mp_ui->rotYSlider_2, SLOT(setValue(int)));
@@ -46,11 +48,13 @@ void MainWindow::createMenu()
 
 void MainWindow::openFile()
 {
-    m_qFilePath = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), tr("STL Files (*.obj)"));
+    m_qFilePath = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), tr("OBJ Files (*.obj)"));
     if (!m_qFilePath.isNull()) {
 
-        if (0 != m_legox.newFile(m_qFilePath)) {
+        mp_ui->myGLWidget->setCubeEngine(mp_cubes);
+        if (0 != m_legox.newFile(m_qFilePath, mp_cubes)) {
             // TODO handle error
+
         }
 
 

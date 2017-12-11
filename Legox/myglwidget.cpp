@@ -16,18 +16,19 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     :  QGLWidget(parent),
       m_timer(new QBasicTimer),
       m_program(new QGLShaderProgram),
-      m_cubes(new CubeEngine)
+      mp_cubes(NULL)
 {
     m_translate = {0.0, 0.0, -5.0};
     m_rotation = {0.0, 0.0, 0.0};
     m_zoom = 0;
+
+
 }
 
 MyGLWidget::~MyGLWidget()
 {
     delete m_timer; m_timer = 0;
     delete m_program; m_program = 0;
-    delete m_cubes; m_cubes = 0;
 
     deleteTexture(m_texture);
 }
@@ -139,9 +140,6 @@ void MyGLWidget::initializeGL()
     // Enable back face culling
     glEnable(GL_CULL_FACE);
 
-    qDebug() << "Initializing cubes...";
-    m_cubes->init();
-
     // using QBasicTimer because its faster that QTimer
     m_timer->start(12, this);
 }
@@ -179,7 +177,7 @@ void MyGLWidget::resizeGL(int w, int h)
     // Calculate aspect ratio
     qreal aspect = (qreal)w / ((qreal)h?h:1);
 
-    const qreal m_zNear = 2.0, m_zFar = 100.0, m_fov = 45.0;
+    const qreal m_zNear = 0.1, m_zFar = 1000.0, m_fov = 45.0;
 
     // Reset projection
     m_projection.setToIdentity();
@@ -205,7 +203,9 @@ void MyGLWidget::paintGL()
     m_program->setUniformValue("texture", 0);
 
     // Draw cube geometry
-    m_cubes->drawCubes(m_program);
+    if (mp_cubes != NULL) {
+        mp_cubes->drawCubes(m_program);
+    }
 }
 
 static void qNormalizeAngle(int &angle)

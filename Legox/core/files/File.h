@@ -2,8 +2,7 @@
 #define _CORE_FILES_FILE_H_
 
 #include <string>
-
-#include "voxelizer.h"
+#include "../opengl/CubeEngine.h"
 
 using namespace std;
 
@@ -13,9 +12,10 @@ public:
     File(string filePath);
 	~File();
 
+
     // Parses file according to file type
     // Returns 0 on success
-    int parseFile();
+    int parseFile(CubeEngine* cubes);
 
     void printInfo();
 
@@ -29,7 +29,7 @@ public:
 private:
 
     int parseSTL();
-    int parseOBJ();
+    int parseOBJ(CubeEngine* cubes);
 
     // Takes extention and returns type
     fileType findType(string ext);
